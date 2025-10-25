@@ -86,8 +86,24 @@ while True:
                 if year2 is year1:
                     print("maybe")
                 elif y1 == year1.date:
-                    if year1 in largest_rains:
-                        print("maybe")
+                    current_year = year2
+                    last_value = None
+                    bad = False
+                    while current_year is not None and current_year.date > y1:
+                        if current_year.amount == last_value:
+                            bad = True
+                            break
+                        last_value = current_year.amount
+                        current_year = current_year.largest_since
+
+                    if current_year is not None and current_year.amount == last_value:
+                        bad = True
+
+                    if current_year is year1:
+                        if bad:
+                            print("false")
+                        else:
+                            print("maybe")
                     else:
                         print("false")
                 else:
