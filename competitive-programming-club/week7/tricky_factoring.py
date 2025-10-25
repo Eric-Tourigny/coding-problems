@@ -4,6 +4,8 @@ cutoff = 10 ** 6
 total = 1
 values = list(range(2, cutoff))
 
+all_count_even = 1
+
 for value in values:
     if value != -1:
         if a % value == 0 or c % value == 0:
@@ -14,6 +16,8 @@ for value in values:
             while c % value == 0:
                 c /= value
                 count += 1
+            if count % 2 == 1:
+                all_count_even = 0
             total *= count + 1
 
         number = value
@@ -21,4 +25,4 @@ for value in values:
             values[number - 2] = -1
             number += value
 
-print(total)
+print(total + all_count_even)
