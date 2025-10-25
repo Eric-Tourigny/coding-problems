@@ -1,49 +1,24 @@
 a, c = map(int, input().split())
 
-a_cur = a
-c_cur = c
-
 cutoff = 10 ** 6
-a_prime_factors = {}
-c_prime_factors = {}
-values = list(range(cutoff))
+total = 1
+values = list(range(2, cutoff))
 
-iterator = iter(values)
-next(iterator)  # discard 2
-next(iterator)  # discard 1
-for value in iterator:
+for value in values:
     if value != -1:
-        if a_cur % value == 0:
+        if a % value == 0 or c % value == 0:
             count = 0
-            while a_cur % value == 0:
-                a_cur /= value
+            while a % value == 0:
+                a /= value
                 count += 1
-            a_prime_factors[value] = count
-            if a_cur == 1 and c_cur == 1:
-                break
-        if c_cur % value == 0:
-            count = 0
-            while c_cur % value == 0:
-                c_cur /= value
+            while c % value == 0:
+                c /= value
                 count += 1
-            c_prime_factors[value] = count
-            if a_cur == 1 and c_cur == 1:
-                break
+            total *= count + 1
+
         number = value
         while number < cutoff:
-            values[number] = -1
+            values[number - 2] = -1
             number += value
 
-z_prime_factors = {}
-for factor, count in a_prime_factors.items():
-    z_prime_factors[factor] = count
-for factor, count in c_prime_factors.items():
-    if factor in z_prime_factors:
-        z_prime_factors[factor] += count
-    else:
-        z_prime_factors[factor] = count
-
-total = 1
-for factor, count in z_prime_factors.items():
-    total *= count + 1
-print(total) 
+print(total)
