@@ -1,30 +1,21 @@
-from heapq import heapify, heappop
-
-N, lock_time = map(int, input().split())
-
-arrival_times = []
-leave_times = []
-
+from heapq import heappush as P, heappop as R
+N,W=map(int,input().split())
+A=[]
+L=[]
 for _ in range(N):
-    arrival_time, stay_time = map(int, input().split())
-    arrival_times.append(arrival_time)
-    leave_times.append(arrival_time + stay_time)
-
-heapify(arrival_times)
-heapify(leave_times)
-
-saves = 0
-current_leave = heappop(leave_times)
-current_arrival = heappop(arrival_times)
-
+	g,s=map(int,input().split())
+	P(A,g)
+	P(L,g+s)
+S=0
+l=R(L)
+a=R(A)
 try:
-    while True:
-        if current_arrival >= current_leave:
-            if current_arrival - current_leave <= lock_time:
-                saves += 1
-                current_arrival = heappop(arrival_times)
-            current_leave = heappop(leave_times)
-        else:
-            current_arrival = heappop(arrival_times)
+	while True:
+		if a>=l:
+			if a-l<=W:
+				S+=1
+				a=R(A)
+			l=R(L)
+		else:a=R(A)
 except:
-    print(saves)
+	print(S)

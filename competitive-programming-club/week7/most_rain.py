@@ -88,19 +88,12 @@ while True:
                 elif y1 == year1.date:
                     current_year = year2
                     last_value = None
-                    bad = False
                     while current_year is not None and current_year.date > y1:
-                        if current_year.amount == last_value:
-                            bad = True
-                            break
                         last_value = current_year.amount
                         current_year = current_year.largest_since
-
-                    if current_year is not None and current_year.amount == last_value:
-                        bad = True
-
+                        
                     if current_year is year1:
-                        if bad:
+                        if year1.amount == last_value:
                             print("false")
                         else:
                             print("maybe")
