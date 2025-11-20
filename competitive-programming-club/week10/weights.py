@@ -1,32 +1,40 @@
-import functools
+import bisect
 
 n = int(input())
-the_weights = tuple(int(input()) for _ in range(n))
+the_weights = list(sorted(int(input()) for _ in range(n)))
+size = len(the_weights)
 
-
-def return_better(target, value1, value2):
-    if abs(target - value1) == abs(target - value2):
-        if target - value1 < 0:
-            return value1
+def abs_min(a, b):
+    if abs(a) == abs(b):
+        if a > 0:
+            return a
         else:
-            return value2
-    elif abs(target - value1) < abs(target - value2):
-        return value1
+            return b
+    elif abs(a) < abs(b):
+        return a
     else:
-        return value2
+        return b
 
-@functools.cache
-def closest(target: int, weights: tuple[int]):
-    print(weights)
-    if len(weights) == 0:
-        print(target)
-        return target
+def recursive_solve(target: int, i: int):
+    value = the_weights[i]
+    new_target = target - value
+    if new_target < 0:
+        return -new_target
+
+    next_larger = bisect.bisect_right(the_weights, new_target, 0, i)
+        
+    if next_larger < i:
+        best_result  = the_weights[next_larger] - new_target
     else:
-        best_diff = float("inf")
-        for i, weight in enumerate(weights):
-            best_diff = return_better(target, closest(target - weight, tuple(weight for j, weight in enumerate(weights) if j != i)), best_diff)
-            best_diff = return_better(target, closest(target, tuple(weight for j, weight in enumerate(weights) if j != i)), best_diff)
-        return best_diff
+        best_result = 10000
 
+    if next_larger == 0:
+        best_result = abs_min(best_result, value - target)
+    else:
+        best_result = abs_min(best_result, recursive_solve(target - value, next_larger - 1))
 
-print(closest(1000, the_weights))
+        best_result = abs_min(best_result, recursive_solve(target, i - 1))
+        
+    return best_result
+
+print(1000 + recursive_solve(1000, size - 1))
